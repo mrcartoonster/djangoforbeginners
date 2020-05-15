@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from pytest_django.asserts import assertContains
+from pytest_django.asserts import assertContains, assertTemplateUsed
 
 from .models import Post
 
@@ -21,9 +21,22 @@ def test_post_content(post):
 
 
 @pytest.mark.third
-@pytest.mark.django_db
 def test_post_list_view(client, post):
     """Converting list view to pytest."""
     response = client.get(reverse("home"))
     assert response.status_code == 200
-    assert assertContains(response, "A good title")
+    assertContains(response, "Nice body content")
+    assertTemplateUsed(response, "home.html")
+    # Crude way of doing it.
+    assert str.encode("Nice body content") in response.content
+
+
+@pytest.mark.fourth
+def test_post_detail_view(client, post):
+    """Convertin detail view to pytest."""
+    response = client.get('/post/1/')
+    no_response = client.get('/post/11111/')
+    assert response.status_code == 200
+    assert no_response.status_code == 404
+    assertContains(response, "A good title")
+    assertTemplateUsed(response, "post_detail.html")
