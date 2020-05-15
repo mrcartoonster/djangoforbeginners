@@ -7,6 +7,14 @@ verify_ssl = true
 
 [packages]
 django = "==3.0"
+pytest = "*"
+pytest-django = "*"
+pytest-emoji = "*"
+pytest-json-report = "*"
+pytest-cov = "*"
+pytest-html = "*"
+pytest-picked = "*"
+pytest-xdist = "*"
 
 [requires]
 python_version = "3.7"
